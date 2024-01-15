@@ -31,7 +31,7 @@ prompt=[
     """
     You are an expert in converting English questions to SQL query!
     The SQL database has the name STUDENT and has the following columns - NAME, CLASS, 
-    SECTION \n\nFor example,\nExample 1 - How many entries of records are present?, 
+    SECTION and MARKS \n\nFor example,\nExample 1 - How many entries of records are present?, 
     the SQL command will be something like this SELECT COUNT(*) FROM STUDENT ;
     \nExample 2 - Tell me all the students studying in Data Science class?, 
     the SQL command will be something like this SELECT * FROM STUDENT 
@@ -40,17 +40,19 @@ prompt=[
     """
 ]
 
-st.set_page_config("Blog Post Generator")
-st.header("Blog Post  Generator")
+st.set_page_config(page_title="I can Retrieve Any SQL query")
+st.header("SQL Data Retrieval App")
 
-input = st.text_input("Enter the topic", key='input')
+input = st.text_input("Enter your query", key='input')
 
-button = st.button("Get Blog content")
+button = st.button("Get Response")
 
 if button:
     response = gemini_response(prompt, input)
     print("Response: ", response)
-    response = read_sql_query(response,"student.db")
+    response_sql = read_sql_query(response,"student.db")
     st.subheader("Response: ")
-    for row in response:
+    for row in response_sql:
         st.write(row)
+    st.subheader("SQL Query used: ")
+    st.write(response)
